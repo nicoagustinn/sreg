@@ -20,6 +20,7 @@ void getPassword(char password[])
     password[i] = '\0';
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // resetting STDIN_FILENO
 }
+
 int enc()   // encrypts original file
 {      
     char src[7]="loginfo";
@@ -50,6 +51,7 @@ int registration()
     remove("loginfo");
     }
 }
+
 int main(void) 
 {
     char loginfo[]="loginfo"; 
