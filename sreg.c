@@ -3,9 +3,13 @@
 #include <unistd.h>
 #include <termios.h> 
 #include <string.h>
+
 #define SIZE 32
+
 char username[SIZE];
-void getPassword(char password[]){
+
+void getPassword(char password[])
+{
     static struct termios oldt, newt;
     int i = 0;int c;
     tcgetattr( STDIN_FILENO, &oldt); // saving old settings of STDIN_FILENO & copy settings for resetting
@@ -16,7 +20,8 @@ void getPassword(char password[]){
     password[i] = '\0';
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // resetting STDIN_FILENO
 }
-int enc(){      // encrypts original file
+int enc()   // encrypts original file
+{      
     char src[7]="loginfo";
     char tgt[64], ch;
     FILE *fs; FILE *ft;
@@ -28,7 +33,9 @@ int enc(){      // encrypts original file
     fclose(fs);fclose(ft);
     remove(src);rename(tgt, src);
 }
-int registration() {
+
+int registration() 
+{
     char password[SIZE];
     FILE *fp;
     fp = fopen("loginfo","w");
@@ -43,7 +50,8 @@ int registration() {
     remove("loginfo");
     }
 }
-int main(void) {
+int main(void) 
+{
     char loginfo[]="loginfo"; 
     if (access( loginfo, F_OK) == 0 ) {
         puts("File exists\n");login();
