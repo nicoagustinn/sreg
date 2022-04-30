@@ -1,7 +1,4 @@
-output: main.o
-	gcc main.o -o sreg.out -O3
-main.o: main.c
-	gcc -c main.c
+output: 
+        gcc sreg.c -o sreg -O3
 clean:
-	rm *.o
-	rm sreg.out
+        rm sreg
