@@ -4,7 +4,7 @@
 #include <termios.h> 
 #include <string.h>
 
-#define SIZE 32
+#define SIZE 64
 
 char username[SIZE];
 
@@ -23,17 +23,17 @@ void getPassword(char password[])
 
 int enc()   // encrypts original file
 {      
-    char src[7]="loginfo";
     char tgt[64], ch;
     FILE *fs; FILE *ft;
-    fs = fopen(src, "r");
+    fs = fopen("loginfo", "r");
     if(!fs){puts("Error while opening file!\n");return 1;}
-    sprintf(tgt, "%s.ed", src);
+    sprintf(tgt, "%s.ed", "loginfo");
     ft = fopen(tgt, "w");
     while((ch = fgetc(fs)) != EOF){fputc(~ch, ft);}
     fclose(fs);fclose(ft);
-    remove(src);rename(tgt, src);
+    remove("loginfo");rename(tgt, "loginfo");
 }
+
 
 int registration() 
 {
@@ -48,15 +48,55 @@ int registration()
     fputs(username,fp); fputs(password,fp);
     fclose(fp);
     enc();
-    remove("loginfo");
     }
 }
+
+void login()
+{
+    char password[SIZE];
+    FILE *fp;
+    FILE *fp1;
+
+    int cnt1 = 0;
+    int cnt2 = 0;
+    int flg = 0;
+
+    fp = fopen("loginfo","w");
+    if(!fp) {printf("File could not be opened.");}else{
+        fputs("Enter username: ",stdout);
+        fgets(username,SIZE,stdin);
+        fputs("Enter password: ",stdout);
+        getPassword(password);
+
+        fflush(stdin);
+        fputs(username, fp);
+        fputs(password, fp);
+        fclose(fp);
+        enc();
+        //remove("loginfo");
+
+        //passwd & uname comp
+        
+        fseek(fp,0,SEEK_END);
+        fseek(fp1,0,SEEK_END);
+        cnt1 = ftell(fp);
+        cnt2 = ftell(fp1);
+
+        fseek(fp,0,SEEK_SET);
+        fseek(fp1,0,SEEK_SET);
+
+        if (cnt1 == cnt2) {puts("File contents are not the same!");}
+
+        
+    }
+}
+
 
 int main(void) 
 {
     char loginfo[]="loginfo"; 
     if (access( loginfo, F_OK) == 0 ) {
-        puts("File exists\n");login();
+        login();
     } else {registration();}
     return 0;
 }
